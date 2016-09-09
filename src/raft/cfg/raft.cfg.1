@@ -1,0 +1,33 @@
+global:
+{
+	listeners: 
+    (
+		{
+            type = "udp";
+            ip = "127.0.0.1";
+            port = 17002;
+		}
+	)
+
+	peer_nodes: 
+    (
+		{
+            type = "udp";
+            ip = "127.0.0.1";
+            port = 17001;
+		},
+		{
+            type = "udp";
+            ip = "127.0.0.1";
+            port = 17003;
+		}
+	)
+
+    loop_timeout_msec = 1;
+
+    election_timeout_min_msec = 3000;
+    election_timeout_max_msec = 5000;
+
+    append_entry_timeout_msec = 1000;
+}
+

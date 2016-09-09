@@ -1,0 +1,51 @@
+SRC_HOME=$(PROJECT_HOME)/src
+DEP=$(PROJECT_HOME)/dep
+UTIL=$(SRC_HOME)/util
+COMMON=$(SRC_HOME)/common
+PROTO=$(SRC_HOME)/proto
+DEMO=$(SRC_HOME)/raft
+
+ifeq ($(OS),)
+OS := $(shell uname)
+endif
+
+ifeq ($(V),)
+CMD_PREFIX := @
+else
+CMD_PREFIX :=
+endif
+
+CC=clang
+CFLAGS= -std=gnu99 -Wall -Wno-missing-braces -Wno-unknown-pragmas -Wunused-function -Wimplicit-function-declaration -DDEBUG  
+RM=rm -f
+AR=ar
+
+INCLUDE=-I/usr/local/include \
+		-I/usr/include/protobuf-c\
+		-I$(DEP)/libuv\
+		-I$(UTIL)/res_parser\
+		-I$(UTIL)\
+        -I$(PROTO)\
+        -I$(COMMON)/state_machine\
+        -I$(COMMON)\
+
+
+CFLAGS+=$(INCLUDE)
+
+ifeq ($(NDEBUG),)
+CFLAGS += -g -O0 
+else
+CFLAGS += -O2 -DDEBUG_DISABLE
+endif
+
+CFLAGS += -fPIC
+
+LFLAGS=-lm -ldl -lz -lrt -luuid -lpthread -lc
+
+LIBS=$(COMMON)/libcommon.a\
+     $(UTIL)/libutil.a\
+     $(DEP)/libuv/libuv.a\
+     $(DEP)/libprotobuf/libprotobuf.a\
+
+RED=\E[1;31m
+RES=\E[0m

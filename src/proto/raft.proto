@@ -1,0 +1,76 @@
+//msg type 
+enum E_RAFT_MSG
+{
+    VOTE_SELF_REQ          = 0;
+    VOTE_SELF_RSP          = 1;
+    APPEND_ENTRIES_REQ     = 2;
+    APPEND_ENTRIES_RSP     = 3;
+    MAX                    = 4;
+}
+
+//election
+message PKG_VOTE_SELF_REQ
+{
+    required uint64 reqer_id            = 1;
+    required uint64 reqer_term          = 2;
+    required uint64 last_entry_term     = 3;
+    required uint64 last_entry_idx      = 4;
+}
+message PKG_VOTE_SELF_RSP
+{
+    required int32  ret           = 1;
+    required uint64 target_id     = 2;
+    required uint64 target_term   = 3;
+}
+
+message APPEND_ENTRY
+{
+    required uint64 entry_term  = 1;
+    required bytes  entry_data  = 2;
+}
+message PKG_APPEND_ENTRIES_REQ
+{
+    required uint64 leader_id               = 1;
+    required uint64 leader_term             = 2;
+    required uint64 leader_committed_index  = 3;
+    required uint64 prev_log_idx            = 4;
+    required uint64 prev_log_term           = 5;
+    repeated APPEND_ENTRY append_entry_arr  = 6; 
+}
+
+message PKG_APPEND_ENTRIES_RSP
+{
+    required uint64 ret                     = 1;
+    required uint64 peer_term               = 2;
+    required uint64 peer_match_index        = 3;
+}
+
+message RAFT_PKG
+{
+    required E_RAFT_MSG msg_type                          = 1;
+    optional PKG_VOTE_SELF_REQ vote_self_req              = 2;
+    optional PKG_VOTE_SELF_RSP vote_self_rsp              = 3;
+    optional PKG_APPEND_ENTRIES_REQ append_entries_req    = 4;
+    optional PKG_APPEND_ENTRIES_RSP append_entries_rsp    = 5;
+}
+
+//message PKG_PM_PUB_MSG_EVENT
+//{
+//    required uint64 topic_id    = 1;
+//    required uint64 msg_seq     = 2;
+//    required bytes  content     = 3;
+//
+//    message ATTR
+//    {
+//        required uint64 attr                        = 1;
+//        optional uint32 alive_secs                  = 2;
+//        optional uint32 delay_secs                  = 3; 
+//        optional uint32 cycle_repeat_times          = 4;
+//        optional uint32 cycle_interval_secs         = 5;
+//        optional uint32 cycle_beg_delay_secs        = 6;
+//        optional bytes  route_keys                  = 7;
+//    }
+//
+//    optional ATTR msg_attr = 4;
+//}
+
